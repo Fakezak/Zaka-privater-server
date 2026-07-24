@@ -1,22 +1,13 @@
 {
-    "name": "freefire-cheat-localconfig",
+    "name": "zaka-private-server",
     "version": "2.3.1",
-    "description": "FreeFire Cheat with localconfig.json",
-    "author": "Zaka",
-    "main": "loader.js",
+    "description": "ZAKA Private Server for FreeFire",
+    "main": "api/index.js",
     "scripts": {
-        "start": "node loader.js",
+        "start": "node api/index.js",
         "deploy": "vercel --prod"
     },
-    "files": [
-        "localconfig.json",
-        "cheat.js",
-        "cheat.lua",
-        "config.dat",
-        "injector.js",
-        "offsets.dat",
-        "loader.js"
-    ],
+    "dependencies": {},
     "engines": {
         "node": ">=16.0.0"
     },
