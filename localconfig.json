@@ -4,7 +4,7 @@
     "game": "FreeFire",
     
     "server": {
-        "base_url": "https://zaka-privater-server.vercel.app",
+        "base_url": "https://zaka-privater-server-mnbq.vercel.app",
         "scripts_path": "/scripts",
         "api_path": "/api"
     },
@@ -18,11 +18,11 @@
     },
     
     "urls": {
-        "cheat_js": "https://zaka-privater-server.vercel.app/scripts/cheat.js",
-        "cheat_lua": "https://zaka-privater-server.vercel.app/scripts/cheat.lua",
-        "config_dat": "https://zaka-privater-server.vercel.app/scripts/config.dat",
-        "injector_js": "https://zaka-privater-server.vercel.app/scripts/injector.js",
-        "offsets_dat": "https://zaka-privater-server.vercel.app/scripts/offsets.dat"
+        "cheat_js": "https://zaka-privater-server-mnbq.vercel.app/scripts/cheat.js",
+        "cheat_lua": "https://zaka-privater-server-mnbq.vercel.app/scripts/cheat.lua",
+        "config_dat": "https://zaka-privater-server-mnbq.vercel.app/scripts/config.dat",
+        "injector_js": "https://zaka-privater-server-mnbq.vercel.app/scripts/injector.js",
+        "offsets_dat": "https://zaka-privater-server-mnbq.vercel.app/scripts/offsets.dat"
     },
     
     "hacks": {
