@@ -2,7 +2,7 @@
     "version": 2,
     "headers": [
         {
-            "source": "/(.*)",
+            "source": "/api/(.*)",
             "headers": [
                 {
                     "key": "Access-Control-Allow-Origin",
@@ -14,7 +14,7 @@
                 },
                 {
                     "key": "Access-Control-Allow-Headers",
-                    "value": "Content-Type, Authorization"
+                    "value": "Content-Type, Authorization, X-Requested-With"
                 },
                 {
                     "key": "Cache-Control",
@@ -23,38 +23,40 @@
             ]
         },
         {
-            "source": "/*.json",
+            "source": "/scripts/(.*)",
             "headers": [
                 {
-                    "key": "Content-Type",
-                    "value": "application/json"
+                    "key": "Access-Control-Allow-Origin",
+                    "value": "*"
+                },
+                {
+                    "key": "Access-Control-Allow-Methods",
+                    "value": "GET, POST, OPTIONS"
+                },
+                {
+                    "key": "Access-Control-Allow-Headers",
+                    "value": "Content-Type"
+                },
+                {
+                    "key": "Cache-Control",
+                    "value": "no-cache, no-store, must-revalidate"
                 }
             ]
         },
         {
-            "source": "/*.js",
+            "source": "/(.*)",
             "headers": [
                 {
-                    "key": "Content-Type",
-                    "value": "application/javascript"
-                }
-            ]
-        },
-        {
-            "source": "/*.lua",
-            "headers": [
+                    "key": "Access-Control-Allow-Origin",
+                    "value": "*"
+                },
                 {
-                    "key": "Content-Type",
-                    "value": "text/plain"
-                }
-            ]
-        },
-        {
-            "source": "/*.dat",
-            "headers": [
+                    "key": "Access-Control-Allow-Methods",
+                    "value": "GET, OPTIONS"
+                },
                 {
-                    "key": "Content-Type",
-                    "value": "application/octet-stream"
+                    "key": "Access-Control-Allow-Headers",
+                    "value": "Content-Type"
                 }
             ]
         }
@@ -65,8 +67,12 @@
             "destination": "/api/index.js"
         },
         {
-            "source": "/scripts/:path*",
-            "destination": "/scripts/:path*"
+            "source": "/api/status",
+            "destination": "/api/index.js"
+        },
+        {
+            "source": "/scripts/(.*)",
+            "destination": "/scripts/$1"
         }
     ]
 }
