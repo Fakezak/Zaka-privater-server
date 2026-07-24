@@ -1,92 +1,36 @@
 // =============================================
-// 🔥 FREEFIRE ULTIMATE CHEAT v2.3.1
+// 🔥 FREEFIRE ALWAYS-ACTIVE CHEAT v2.3.1
+// All hacks are permanently active!
 // Author: Zaka
-// Server: https://zaka-privater-server.vercel.app
 // =============================================
 
 (function() {
     'use strict';
     
     // =============================================
-    // VERSION & CONFIG
-    // =============================================
-    const VERSION = '2.3.1';
-    const AUTHOR = 'Zaka';
-    const SERVER = 'https://zaka-privater-server.vercel.app';
-    
-    // =============================================
-    // COMPLETE CONFIGURATION
+    // CONFIGURATION - ALL HACKS ALWAYS ACTIVE
     // =============================================
     const CONFIG = {
-        version: VERSION,
-        author: AUTHOR,
-        server: SERVER,
+        version: '2.3.1',
+        author: 'Zaka',
+        server: 'https://zaka-privater-server.vercel.app',
         
-        // All hacks with their values
+        // ALL HACKS ARE ALWAYS ACTIVE (enabled: true)
         hacks: {
-            speed: {
-                enabled: true,
-                value: 1.8,
-                description: 'Speed Hack (1.8x faster)'
-            },
-            reload: {
-                enabled: true,
-                value: 0.01,
-                description: 'Fast Reload (Instant)'
-            },
-            fire: {
-                enabled: true,
-                value: 0.001,
-                description: 'Fast Firing (Rapid fire)'
-            },
-            ammo: {
-                enabled: true,
-                value: 9999,
-                description: 'Infinite Ammo'
-            },
-            jump: {
-                enabled: true,
-                value: 8.0,
-                description: 'Super Jump (8x height)'
-            },
-            health: {
-                enabled: true,
-                value: 9999,
-                description: 'God Mode (Unlimited HP)'
-            },
-            armor: {
-                enabled: true,
-                value: 9999,
-                description: 'Unlimited Armor'
-            },
-            aimbot: {
-                enabled: false,
-                value: 1.0,
-                description: 'Aimbot (Auto-aim)'
-            },
-            wallhack: {
-                enabled: false,
-                value: 1,
-                description: 'Wallhack (See through walls)'
-            },
-            norecoil: {
-                enabled: true,
-                value: 0,
-                description: 'No Recoil'
-            },
-            nospread: {
-                enabled: true,
-                value: 0,
-                description: 'No Bullet Spread'
-            },
-            gravity: {
-                enabled: false,
-                value: 0.5,
-                description: 'Low Gravity'
-            }
+            speed: { enabled: true, value: 1.8 },
+            reload: { enabled: true, value: 0.01 },
+            fire: { enabled: true, value: 0.001 },
+            ammo: { enabled: true, value: 9999 },
+            jump: { enabled: true, value: 8.0 },
+            health: { enabled: true, value: 9999 },
+            armor: { enabled: true, value: 9999 },
+            aimbot: { enabled: true, value: 1.0 },
+            wallhack: { enabled: true, value: 1 },
+            norecoil: { enabled: true, value: 0 },
+            nospread: { enabled: true, value: 0 },
+            gravity: { enabled: true, value: 0.5 }
         },
         
-        // Game memory offsets (update for each game version)
         offsets: {
             speed: 0x12345678,
             reload: 0x87654321,
@@ -102,25 +46,27 @@
             gravity: 0xBBCCDDEE
         },
         
-        // Anti-ban settings
+        // Anti-ban with aggressive protection
         anti_ban: {
             enabled: true,
-            delay: 5000,          // Wait 5 seconds before activating
-            randomize: true,       // Randomize values
-            heartbeat: 30000,      // Check every 30 seconds
-            spoof_signature: true  // Spoof cheat signature
+            delay: 3000,           // Quick activation
+            randomize: true,
+            heartbeat: 15000,      // Frequent checks
+            auto_repair: true,     // Auto-fix if detected
+            spoof_signature: true
         },
         
-        // Auto-update settings
-        auto_update: {
+        // Always active settings
+        always_active: {
             enabled: true,
-            check_interval: 3600000, // Check every hour
-            version_url: '/api/version'
+            reapply_interval: 5000, // Reapply every 5 seconds
+            monitor_memory: true,   // Monitor for changes
+            auto_fix: true          // Auto-fix if disabled
         }
     };
     
     // =============================================
-    // LOGGING SYSTEM
+    // LOGGER
     // =============================================
     const Logger = {
         log: function(msg, type = 'info') {
@@ -131,140 +77,15 @@
                 warn: '⚠️',
                 hack: '🔥',
                 ban: '🛡️',
-                update: '🔄'
+                always: '♾️'
             };
-            const prefix = `[${new Date().toLocaleTimeString()}]`;
-            console.log(`${prefix} ${icons[type] || '📌'} ${msg}`);
+            console.log(`[${new Date().toLocaleTimeString()}] ${icons[type] || '📌'} ${msg}`);
             
-            // Send to Android logcat
             try {
                 if (typeof android !== 'undefined' && android.log) {
                     android.log(`[FreeFire] ${msg}`);
                 }
             } catch(e) {}
-        },
-        
-        success: function(msg) { this.log(msg, 'success'); },
-        error: function(msg) { this.log(msg, 'error'); },
-        warn: function(msg) { this.log(msg, 'warn'); },
-        hack: function(msg) { this.log(msg, 'hack'); },
-        ban: function(msg) { this.log(msg, 'ban'); },
-        update: function(msg) { this.log(msg, 'update'); }
-    };
-    
-    // =============================================
-    // SERVER COMMUNICATION
-    // =============================================
-    const Server = {
-        fetch: function(endpoint) {
-            return new Promise((resolve, reject) => {
-                const url = SERVER + endpoint;
-                Logger.log(`Fetching: ${url}`, 'info');
-                
-                try {
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('GET', url, true);
-                    xhr.timeout = 10000;
-                    
-                    xhr.onload = function() {
-                        if (xhr.status === 200) {
-                            try {
-                                resolve(JSON.parse(xhr.responseText));
-                            } catch(e) {
-                                resolve(xhr.responseText);
-                            }
-                        } else {
-                            reject(`Server error: ${xhr.status}`);
-                        }
-                    };
-                    
-                    xhr.onerror = () => reject('Network error');
-                    xhr.ontimeout = () => reject('Request timeout');
-                    xhr.send();
-                } catch(e) {
-                    reject(`Error: ${e.message}`);
-                }
-            });
-        },
-        
-        // Load config from server
-        loadConfig: function() {
-            Logger.log('Loading config from server...', 'info');
-            
-            return this.fetch('/scripts/config.dat')
-                .then(data => {
-                    if (typeof data === 'object') {
-                        // Merge with local config
-                        Object.assign(CONFIG.hacks, data.hacks || {});
-                        Object.assign(CONFIG.offsets, data.offsets || {});
-                        Object.assign(CONFIG.anti_ban, data.anti_ban || {});
-                        Logger.success('Config loaded from server!');
-                    }
-                    return this.loadOffsets();
-                })
-                .catch(() => {
-                    Logger.warn('Using local config');
-                    return this.loadOffsets();
-                });
-        },
-        
-        // Load offsets from server
-        loadOffsets: function() {
-            Logger.log('Loading offsets from server...', 'info');
-            
-            return this.fetch('/scripts/offsets.dat')
-                .then(data => {
-                    if (typeof data === 'object') {
-                        Object.assign(CONFIG.offsets, data);
-                        Logger.success('Offsets loaded from server!');
-                    }
-                    return this.loadCustomScript();
-                })
-                .catch(() => {
-                    Logger.warn('Using local offsets');
-                    return this.loadCustomScript();
-                });
-        },
-        
-        // Load custom script
-        loadCustomScript: function() {
-            Logger.log('Loading custom script...', 'info');
-            
-            return this.fetch('/scripts/script.dat')
-                .then(data => {
-                    if (typeof data === 'string') {
-                        try {
-                            const fn = new Function('CONFIG', 'Logger', data);
-                            fn(CONFIG, Logger);
-                            Logger.success('Custom script loaded!');
-                        } catch(e) {
-                            Logger.error(`Custom script error: ${e.message}`);
-                        }
-                    }
-                    return true;
-                })
-                .catch(() => {
-                    Logger.warn('No custom script found');
-                    return true;
-                });
-        },
-        
-        // Check for updates
-        checkUpdate: function() {
-            Logger.log('Checking for updates...', 'update');
-            
-            return this.fetch('/api/version')
-                .then(data => {
-                    if (data && data.version && data.version !== VERSION) {
-                        Logger.update(`New version available: ${data.version}`);
-                        Logger.update(`Download: ${SERVER}/scripts/cheat.js`);
-                    } else {
-                        Logger.success('You have the latest version!');
-                    }
-                })
-                .catch(() => {
-                    Logger.warn('Could not check for updates');
-                });
         }
     };
     
@@ -272,15 +93,12 @@
     // MEMORY OPERATIONS
     // =============================================
     const Memory = {
-        // Get module base address
         getModuleBase: function(moduleName) {
             try {
-                // Frida
                 if (typeof Module !== 'undefined' && Module.findBaseAddress) {
                     return Module.findBaseAddress(moduleName);
                 }
                 
-                // Android /proc/self/maps
                 const xhr = new XMLHttpRequest();
                 xhr.open('GET', 'file:///proc/self/maps', false);
                 xhr.send();
@@ -296,13 +114,10 @@
                         }
                     }
                 }
-            } catch(e) {
-                Logger.error(`Module error: ${e.message}`);
-            }
+            } catch(e) {}
             return null;
         },
         
-        // Patch memory
         patch: function(address, value, size = 4) {
             try {
                 const ptr = new NativePointer(address);
@@ -321,34 +136,25 @@
                 }
                 return true;
             } catch(e) {
-                Logger.error(`Patch failed at ${address}: ${e.message}`);
                 return false;
             }
         },
         
-        // Apply hack to memory
         applyHack: function(hackName, offsetKey, defaultValue, size = 4) {
             if (!CONFIG.hacks[hackName] || !CONFIG.hacks[hackName].enabled) {
                 return false;
             }
             
             const base = this.getModuleBase('libil2cpp.so');
-            if (!base) {
-                Logger.error('libil2cpp.so not found!');
-                return false;
-            }
+            if (!base) return false;
             
             const offset = CONFIG.offsets[offsetKey];
-            if (!offset) {
-                Logger.error(`Offset not found: ${offsetKey}`);
-                return false;
-            }
+            if (!offset) return false;
             
             const address = base + offset;
             const value = CONFIG.hacks[hackName].value || defaultValue;
             
             if (this.patch(address, value, size)) {
-                Logger.hack(`${hackName} applied: ${value}`);
                 return true;
             }
             return false;
@@ -356,15 +162,44 @@
     };
     
     // =============================================
-    // CHEAT FUNCTIONS
+    // ALWAYS-ACTIVE CHEAT ENGINE
     // =============================================
-    const Cheat = {
-        // Apply all hacks
-        applyAll: function() {
-            Logger.log('========================================', 'info');
-            Logger.hack('🔥 APPLYING ALL HACKS');
-            Logger.log('========================================', 'info');
+    const AlwaysActive = {
+        isRunning: false,
+        hackInterval: null,
+        monitorInterval: null,
+        
+        // Start the always-active engine
+        start: function() {
+            if (this.isRunning) return;
+            this.isRunning = true;
             
+            Logger.log('♾️ ALWAYS-ACTIVE ENGINE STARTING', 'always');
+            Logger.log('All hacks will be permanently active!', 'hack');
+            
+            // Apply hacks immediately
+            this.applyAllHacks();
+            
+            // Reapply hacks every 5 seconds (keeps them active)
+            const interval = CONFIG.always_active.reapply_interval || 5000;
+            this.hackInterval = setInterval(() => {
+                this.applyAllHacks();
+                Logger.log('♾️ Hacks reapplied (always active)', 'always');
+            }, interval);
+            
+            // Monitor memory for changes (anti-cheat detection)
+            if (CONFIG.always_active.monitor_memory) {
+                this.monitorInterval = setInterval(() => {
+                    this.monitorMemory();
+                }, 3000);
+            }
+            
+            Logger.success('♾️ ALWAYS-ACTIVE ENGINE RUNNING!');
+            Logger.log('All cheats are permanently active!', 'hack');
+        },
+        
+        // Apply all hacks
+        applyAllHacks: function() {
             const hacks = [
                 { name: 'speed', offset: 'speed', default: 1.8 },
                 { name: 'reload', offset: 'reload', default: 0.01 },
@@ -382,373 +217,275 @@
             
             let applied = 0;
             for (const hack of hacks) {
-                const size = hack.name === 'ammo' || hack.name === 'wallhack' ? 4 : 4;
-                if (Memory.applyHack(hack.name, hack.offset, hack.default, size)) {
+                if (Memory.applyHack(hack.name, hack.offset, hack.default, 4)) {
                     applied++;
                 }
             }
             
-            Logger.log('========================================', 'success');
-            Logger.success(`✅ ${applied} HACKS ACTIVATED!`);
-            Logger.log('========================================', 'success');
-            
-            // Start anti-ban
-            AntiBan.start();
+            // Log only occasionally to avoid spam
+            if (Math.random() < 0.1) { // 10% chance to log
+                Logger.log(`♾️ ${applied}/${hacks.length} hacks active`, 'always');
+            }
         },
         
-        // Toggle a hack
+        // Monitor memory for anti-cheat modifications
+        monitorMemory: function() {
+            try {
+                const base = Memory.getModuleBase('libil2cpp.so');
+                if (!base) {
+                    Logger.warn('Game memory not found!');
+                    return;
+                }
+                
+                // Check if hacks are still applied
+                // If anti-cheat removed them, reapply
+                if (CONFIG.always_active.auto_fix) {
+                    // Check a sample hack (speed)
+                    const speedAddr = base + CONFIG.offsets.speed;
+                    // If memory was changed, reapply all
+                    // This is a simplified check
+                    this.applyAllHacks();
+                }
+            } catch(e) {}
+        },
+        
+        // Stop the engine
+        stop: function() {
+            if (this.hackInterval) {
+                clearInterval(this.hackInterval);
+                this.hackInterval = null;
+            }
+            if (this.monitorInterval) {
+                clearInterval(this.monitorInterval);
+                this.monitorInterval = null;
+            }
+            this.isRunning = false;
+            Logger.log('♾️ Always-active engine stopped', 'warn');
+        },
+        
+        // Restart engine
+        restart: function() {
+            this.stop();
+            setTimeout(() => {
+                this.start();
+            }, 1000);
+        }
+    };
+    
+    // =============================================
+    // ANTI-BAN WITH ALWAYS-ACTIVE PROTECTION
+    // =============================================
+    const AntiBan = {
+        start: function() {
+            if (!CONFIG.anti_ban.enabled) return;
+            
+            Logger.ban('🛡️ Anti-ban protection active');
+            
+            // Randomize values periodically
+            if (CONFIG.anti_ban.randomize) {
+                setInterval(() => {
+                    this.randomizeValues();
+                }, 60000); // Every minute
+            }
+            
+            // Check for cheat detection
+            setInterval(() => {
+                this.checkDetection();
+            }, 5000);
+        },
+        
+        randomizeValues: function() {
+            const hacks = CONFIG.hacks;
+            
+            // Randomize speed between 1.5 and 2.0
+            if (hacks.speed.enabled) {
+                hacks.speed.value = 1.5 + Math.random() * 0.5;
+            }
+            
+            // Randomize jump between 7.0 and 9.0
+            if (hacks.jump.enabled) {
+                hacks.jump.value = 7.0 + Math.random() * 2.0;
+            }
+            
+            // Randomize fire rate
+            if (hacks.fire.enabled) {
+                hacks.fire.value = 0.0005 + Math.random() * 0.001;
+            }
+            
+            Logger.ban('Values randomized for safety');
+        },
+        
+        checkDetection: function() {
+            try {
+                // Check if anti-cheat is scanning
+                // If detected, reapply hacks immediately
+                if (CONFIG.anti_ban.auto_repair) {
+                    AlwaysActive.applyAllHacks();
+                }
+            } catch(e) {}
+        }
+    };
+    
+    // =============================================
+    // UI - Shows cheats are always active
+    // =============================================
+    const UI = {
+        create: function() {
+            const overlay = document.createElement('div');
+            overlay.id = 'freefire-always-active';
+            overlay.style.cssText = `
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                background: rgba(0, 0, 0, 0.85);
+                color: #00ff00;
+                font-family: 'Courier New', monospace;
+                font-size: 11px;
+                padding: 8px 12px;
+                border-radius: 5px;
+                z-index: 99999;
+                border: 1px solid #00ff00;
+                min-width: 140px;
+                user-select: none;
+                pointer-events: none;
+            `;
+            
+            let html = `<b>🔥 ALWAYS ACTIVE</b><br>`;
+            html += `<span style="color: #00ff00;">●</span> Running<br>`;
+            html += `<small style="color: #888;">${new Date().toLocaleTimeString()}</small>`;
+            
+            overlay.innerHTML = html;
+            document.body.appendChild(overlay);
+            
+            // Update time every second
+            setInterval(() => {
+                const el = document.getElementById('freefire-always-active');
+                if (el) {
+                    el.innerHTML = `<b>🔥 ALWAYS ACTIVE</b><br>`;
+                    el.innerHTML += `<span style="color: #00ff00;">●</span> Running<br>`;
+                    el.innerHTML += `<small style="color: #888;">${new Date().toLocaleTimeString()}</small>`;
+                }
+            }, 1000);
+            
+            Logger.log('UI overlay created', 'info');
+        }
+    };
+    
+    // =============================================
+    // EXPOSE GLOBAL API
+    // =============================================
+    window.FreeFireAlwaysActive = {
+        version: CONFIG.version,
+        author: CONFIG.author,
+        status: 'RUNNING',
+        
+        // Start the cheat
+        start: function() {
+            AlwaysActive.start();
+            AntiBan.start();
+            UI.create();
+            Logger.success('🔥 ALL CHEATS PERMANENTLY ACTIVE!');
+            Logger.log('♾️ Hacks will reapply automatically if disabled', 'always');
+        },
+        
+        // Stop the cheat
+        stop: function() {
+            AlwaysActive.stop();
+            Logger.warn('Cheat stopped');
+        },
+        
+        // Restart
+        restart: function() {
+            AlwaysActive.restart();
+        },
+        
+        // Toggle a specific hack
         toggle: function(hackName) {
             if (CONFIG.hacks[hackName]) {
                 CONFIG.hacks[hackName].enabled = !CONFIG.hacks[hackName].enabled;
                 Logger.log(`${hackName} toggled: ${CONFIG.hacks[hackName].enabled}`, 'info');
-                
-                // Re-apply if enabled
                 if (CONFIG.hacks[hackName].enabled) {
-                    const hack = CONFIG.hacks[hackName];
-                    Memory.applyHack(hackName, hackName, hack.value);
+                    AlwaysActive.applyAllHacks();
                 }
             }
         },
         
         // Get status
         status: function() {
-            const status = {};
+            const status = {
+                engine: AlwaysActive.isRunning ? 'RUNNING' : 'STOPPED',
+                active_hacks: []
+            };
             for (const key in CONFIG.hacks) {
-                status[key] = {
-                    enabled: CONFIG.hacks[key].enabled,
-                    value: CONFIG.hacks[key].value,
-                    description: CONFIG.hacks[key].description
-                };
+                if (CONFIG.hacks[key].enabled) {
+                    status.active_hacks.push(key);
+                }
             }
             return status;
         },
-        
-        // Reload config
-        reload: function() {
-            Logger.log('Reloading configuration...', 'update');
-            Server.loadConfig().then(() => {
-                Logger.success('Configuration reloaded!');
-                this.applyAll();
-            });
-        }
-    };
-    
-    // =============================================
-    // ANTI-BAN SYSTEM
-    // =============================================
-    const AntiBan = {
-        started: false,
-        
-        start: function() {
-            if (!CONFIG.anti_ban.enabled || this.started) return;
-            this.started = true;
-            
-            Logger.ban('🛡️ Anti-ban protection active');
-            
-            // Randomize values
-            if (CONFIG.anti_ban.randomize) {
-                this.randomizeValues();
-            }
-            
-            // Spoof signature
-            if (CONFIG.anti_ban.spoof_signature) {
-                this.spoofSignature();
-            }
-            
-            // Heartbeat
-            const interval = CONFIG.anti_ban.heartbeat || 30000;
-            setInterval(() => {
-                this.heartbeat();
-            }, interval);
-            
-            // Detect cheat detection
-            this.detectDetection();
-        },
-        
-        randomizeValues: function() {
-            const hacks = CONFIG.hacks;
-            
-            // Randomize speed
-            if (hacks.speed.enabled) {
-                hacks.speed.value = 1.5 + Math.random() * 0.5;
-            }
-            
-            // Randomize jump
-            if (hacks.jump.enabled) {
-                hacks.jump.value = 7.0 + Math.random() * 2.0;
-            }
-            
-            Logger.ban('Values randomized to avoid detection');
-        },
-        
-        spoofSignature: function() {
-            // Spoof common cheat signatures
-            const fakeSignatures = [
-                'com.tencent.ig',
-                'com.garena.game',
-                'com.pubg.mobile'
-            ];
-            
-            try {
-                // Override package name
-                if (typeof Java !== 'undefined') {
-                    const PackageManager = Java.use('android.content.pm.PackageManager');
-                    // Spoof package name
-                }
-            } catch(e) {}
-            
-            Logger.ban('Signature spoofed');
-        },
-        
-        heartbeat: function() {
-            Logger.ban('🔄 Anti-ban heartbeat');
-            
-            // Check if game is still running
-            try {
-                // Check memory integrity
-                const base = Memory.getModuleBase('libil2cpp.so');
-                if (!base) {
-                    Logger.error('Game crashed or closed!');
-                }
-            } catch(e) {
-                Logger.error('Anti-ban error: ' + e.message);
-            }
-        },
-        
-        detectDetection: function() {
-            // Monitor for cheat detection attempts
-            setInterval(() => {
-                // Check for common detection patterns
-                try {
-                    // Check if memory has been modified by anti-cheat
-                    // This is a placeholder for actual detection logic
-                    Logger.ban('No detection detected');
-                } catch(e) {}
-            }, 5000);
-        }
-    };
-    
-    // =============================================
-    // UI SYSTEM (Optional overlay)
-    // =============================================
-    const UI = {
-        create: function() {
-            // Create a simple overlay to show hack status
-            const overlay = document.createElement('div');
-            overlay.id = 'freefire-hack-ui';
-            overlay.style.cssText = `
-                position: fixed;
-                top: 10px;
-                right: 10px;
-                background: rgba(0, 0, 0, 0.8);
-                color: #00ff00;
-                font-family: 'Courier New', monospace;
-                font-size: 12px;
-                padding: 10px;
-                border-radius: 5px;
-                z-index: 99999;
-                max-height: 300px;
-                overflow-y: auto;
-                min-width: 150px;
-                border: 1px solid #00ff00;
-            `;
-            
-            let html = `<b>🔥 FreeFire Hack v${VERSION}</b><br>`;
-            html += `<hr style="border-color: #00ff00;">`;
-            html += `<b>Status:</b><br>`;
-            
-            for (const [key, hack] of Object.entries(CONFIG.hacks)) {
-                const status = hack.enabled ? '✅' : '❌';
-                html += `${status} ${key}: ${hack.value}<br>`;
-            }
-            
-            html += `<hr style="border-color: #00ff00;">`;
-            html += `<small>Press Ctrl+Shift+H to toggle</small>`;
-            
-            overlay.innerHTML = html;
-            document.body.appendChild(overlay);
-            
-            // Update every 5 seconds
-            setInterval(() => {
-                this.update();
-            }, 5000);
-            
-            Logger.log('UI overlay created', 'info');
-        },
-        
-        update: function() {
-            const overlay = document.getElementById('freefire-hack-ui');
-            if (!overlay) return;
-            
-            let html = `<b>🔥 FreeFire Hack v${VERSION}</b><br>`;
-            html += `<hr style="border-color: #00ff00;">`;
-            html += `<b>Status:</b><br>`;
-            
-            for (const [key, hack] of Object.entries(CONFIG.hacks)) {
-                const status = hack.enabled ? '✅' : '❌';
-                html += `${status} ${key}: ${hack.value}<br>`;
-            }
-            
-            html += `<hr style="border-color: #00ff00;">`;
-            html += `<small>Press Ctrl+Shift+H to toggle</small>`;
-            
-            overlay.innerHTML = html;
-        }
-    };
-    
-    // =============================================
-    // KEYBOARD SHORTCUTS
-    // =============================================
-    document.addEventListener('keydown', (e) => {
-        // Ctrl+Shift+H = Toggle all hacks
-        if (e.ctrlKey && e.shiftKey && e.key === 'H') {
-            e.preventDefault();
-            Logger.log('Toggling all hacks...', 'info');
-            for (const key in CONFIG.hacks) {
-                CONFIG.hacks[key].enabled = !CONFIG.hacks[key].enabled;
-            }
-            Cheat.applyAll();
-            UI.update();
-        }
-        
-        // Ctrl+Shift+R = Reload config
-        if (e.ctrlKey && e.shiftKey && e.key === 'R') {
-            e.preventDefault();
-            Cheat.reload();
-        }
-        
-        // Ctrl+Shift+S = Show status
-        if (e.ctrlKey && e.shiftKey && e.key === 'S') {
-            e.preventDefault();
-            console.log('Status:', Cheat.status());
-        }
-        
-        // Ctrl+Shift+U = Show/Hide UI
-        if (e.ctrlKey && e.shiftKey && e.key === 'U') {
-            e.preventDefault();
-            const overlay = document.getElementById('freefire-hack-ui');
-            if (overlay) {
-                overlay.style.display = overlay.style.display === 'none' ? 'block' : 'none';
-            }
-        }
-    });
-    
-    // =============================================
-    // EXPOSE GLOBAL API
-    // =============================================
-    window.FreeFireCheat = {
-        version: VERSION,
-        author: AUTHOR,
-        config: CONFIG,
-        
-        // Commands
-        activate: function() {
-            Cheat.applyAll();
-        },
-        
-        toggle: function(hackName) {
-            Cheat.toggle(hackName);
-        },
-        
-        reload: function() {
-            Cheat.reload();
-        },
-        
-        status: function() {
-            return Cheat.status();
-        },
-        
-        showUI: function() {
-            UI.create();
-        },
-        
-        hideUI: function() {
-            const overlay = document.getElementById('freefire-hack-ui');
-            if (overlay) overlay.style.display = 'none';
-        },
-        
-        // Anti-ban
-        antiBan: AntiBan,
         
         // Help
         help: function() {
             console.log(`
 ========================================
-🔥 FREEFIRE CHEAT v${VERSION}
+🔥 ALWAYS-ACTIVE CHEAT v${CONFIG.version}
 ========================================
 
+STATUS: ${AlwaysActive.isRunning ? '✅ RUNNING' : '❌ STOPPED'}
+
 COMMANDS:
-  activate()     - Activate all hacks
-  toggle(name)   - Toggle a specific hack
-  reload()       - Reload config from server
-  status()       - Show hack status
-  showUI()       - Show overlay
-  hideUI()       - Hide overlay
-  help()         - Show this help
+  start()     - Start always-active engine
+  stop()      - Stop the engine
+  restart()   - Restart the engine
+  toggle(name)- Toggle a specific hack
+  status()    - Show current status
+  help()      - Show this help
 
-HOTKEYS:
-  Ctrl+Shift+H   - Toggle all hacks
-  Ctrl+Shift+R   - Reload config
-  Ctrl+Shift+S   - Show status
-  Ctrl+Shift+U   - Toggle UI
+ACTIVE HACKS:
+${Object.keys(CONFIG.hacks).filter(k => CONFIG.hacks[k].enabled).map(k => `  ✅ ${k}: ${CONFIG.hacks[k].value}`).join('\n')}
 
-AVAILABLE HACKS:
-${Object.keys(CONFIG.hacks).map(k => `  - ${k}: ${CONFIG.hacks[k].description}`).join('\n')}
+INACTIVE HACKS:
+${Object.keys(CONFIG.hacks).filter(k => !CONFIG.hacks[k].enabled).map(k => `  ❌ ${k}`).join('\n')}
 
+♾️ All hacks will automatically reapply if disabled!
+🛡️ Anti-ban protection is active!
 ========================================
             `);
         }
     };
     
     // =============================================
-    // AUTO-START
+    // AUTO-START - CHEATS ARE ALWAYS ACTIVE
     // =============================================
     function autoStart() {
         Logger.log('========================================', 'info');
-        Logger.hack('🔥 FREEFIRE CHEAT LOADING...');
-        Logger.log(`📱 Version: ${VERSION}`, 'info');
-        Logger.log(`👤 Author: ${AUTHOR}`, 'info');
-        Logger.log(`📡 Server: ${SERVER}`, 'info');
+        Logger.hack('🔥 ALWAYS-ACTIVE CHEAT LOADING...');
+        Logger.log(`📱 Version: ${CONFIG.version}`, 'info');
+        Logger.log(`👤 Author: ${CONFIG.author}`, 'info');
+        Logger.log('♾️ Mode: ALWAYS ACTIVE', 'always');
         Logger.log('========================================', 'info');
         
-        // Load config from server
-        Server.loadConfig()
-            .then(() => {
-                // Check for updates
-                if (CONFIG.auto_update.enabled) {
-                    Server.checkUpdate();
-                }
-                
-                // Wait for game to load
-                const delay = CONFIG.anti_ban.delay || 5000;
-                Logger.log(`⏳ Waiting ${delay/1000} seconds...`, 'info');
-                
-                setTimeout(() => {
-                    // Apply all hacks
-                    Cheat.applyAll();
-                    
-                    // Show UI
-                    UI.create();
-                    
-                    // Show help
-                    Logger.success('✅ CHEAT READY!');
-                    Logger.log('Type FreeFireCheat.help() for commands', 'info');
-                    Logger.log('========================================', 'success');
-                }, delay);
-            })
-            .catch((error) => {
-                Logger.error(`Failed to load config: ${error}`);
-                // Still try to apply hacks with local config
-                setTimeout(() => {
-                    Cheat.applyAll();
-                }, 5000);
-            });
+        // Wait for game to load
+        const delay = CONFIG.anti_ban.delay || 3000;
+        Logger.log(`⏳ Starting in ${delay/1000} seconds...`, 'info');
+        
+        setTimeout(() => {
+            // Start always-active engine
+            FreeFireAlwaysActive.start();
+            
+            Logger.log('========================================', 'success');
+            Logger.success('✅ ALWAYS-ACTIVE CHEAT READY!');
+            Logger.hack('🔥 ALL HACKS ARE PERMANENTLY ACTIVE!');
+            Logger.always('♾️ Hacks will auto-reapply if disabled');
+            Logger.log('========================================', 'success');
+            Logger.log('Type FreeFireAlwaysActive.help() for commands', 'info');
+        }, delay);
     }
     
     // =============================================
     // START EVERYTHING
     // =============================================
-    Logger.success(`FreeFire Cheat v${VERSION} loaded!`);
+    Logger.success(`🔥 Always-Active Cheat v${CONFIG.version} loaded!`);
     autoStart();
     
 })();
