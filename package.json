@@ -1,0 +1,13 @@
+{
+  "name": "Zaka-private-server",
+  "version": "2.0.0",
+  "description": "zaka Private Server for Free Fire MAX",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@vercel/node": "^2.0.0"
+  }
+}
