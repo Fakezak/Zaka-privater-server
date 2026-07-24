@@ -1,0 +1,26 @@
+{
+    "verAddr": "https://zaka-privater-server.vercel.app/scripts/cheat.js",
+    "luaAddr": "https://zaka-privater-server.vercel.app/scripts/cheat.lua",
+    "configAddr": "https://zaka-privater-server.vercel.app/scripts/config.dat",
+    "injectorAddr": "https://zaka-privater-server.vercel.app/scripts/injector.js",
+    "offsetsAddr": "https://zaka-privater-server.vercel.app/scripts/offsets.dat",
+    
+    "hacks": {
+        "speed": 1.8,
+        "reload": 0.01,
+        "fire": 0.001,
+        "ammo": 9999,
+        "jump": 8.0,
+        "health": 9999,
+        "armor": 9999,
+        "aimbot": 1.0,
+        "wallhack": 1,
+        "norecoil": 0,
+        "nospread": 0,
+        "gravity": 0.5
+    },
+    
+    "anti_ban": true,
+    "always_active": true,
+    "auto_inject": true
+}
