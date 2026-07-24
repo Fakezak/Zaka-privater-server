@@ -1,0 +1,14 @@
+{
+    "speed": 0x12345678,
+    "reload": 0x87654321,
+    "fire": 0xABCDEF12,
+    "ammo": 0x11223344,
+    "jump": 0x44332211,
+    "health": 0x55667788,
+    "armor": 0x99AABBCC,
+    "aimbot": 0xDDEEFF00,
+    "wallhack": 0x00112233,
+    "norecoil": 0x33445566,
+    "nospread": 0x778899AA,
+    "gravity": 0xBBCCDDEE
+}
