@@ -7,17 +7,24 @@
         "jump": { "enabled": true, "value": 8.0 },
         "health": { "enabled": true, "value": 9999 },
         "armor": { "enabled": true, "value": 9999 },
-        "aimbot": { "enabled": false, "value": 1.0 },
-        "wallhack": { "enabled": false, "value": 1 },
+        "aimbot": { "enabled": true, "value": 1.0 },
+        "wallhack": { "enabled": true, "value": 1 },
         "norecoil": { "enabled": true, "value": 0 },
         "nospread": { "enabled": true, "value": 0 },
-        "gravity": { "enabled": false, "value": 0.5 }
+        "gravity": { "enabled": true, "value": 0.5 }
+    },
+    "always_active": {
+        "enabled": true,
+        "reapply_interval": 5000,
+        "monitor_memory": true,
+        "auto_fix": true
     },
     "anti_ban": {
         "enabled": true,
-        "delay": 5000,
+        "delay": 3000,
         "randomize": true,
-        "heartbeat": 30000,
+        "heartbeat": 15000,
+        "auto_repair": true,
         "spoof_signature": true
     }
 }
