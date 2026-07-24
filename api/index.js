@@ -1,5 +1,5 @@
 // ============================================
-// HOLOXZTER PRIVATE SERVER - VERCEL
+// ZAKA PRIVATE SERVER - VERCEL
 // ============================================
 
 // Secret key (change this weekly)
@@ -8,11 +8,9 @@ const SECRET_KEY = process.env.SECRET_KEY || 'zakacheats_2026';
 // Your cheat script
 const cheatScript = `
 -- ============================================
--- HOLOXZTER PRIVATE SERVER
+-- ZAKA PRIVATE SERVER
 -- ============================================
 print("🔥 ZAKA Private Server Loaded!")
-print("📺 YouTube: https://youtube.com/@holoxzterreal")
-print("📱 WhatsApp: https://whatsapp.com/channel/0029Vb88dhE0QeapekxfUC1N")
 
 -- ============================================
 -- AIMLOCK SCRIPT
@@ -97,7 +95,7 @@ function aimlock.onTick()
     aimlock.smoothAim(target)
 end
 
-print("✅ HOLOXZTER Aimlock Loaded!")
+print("✅ ZAKA Aimlock Loaded!")
 
 -- ============================================
 -- BACKJUMP SCRIPT
@@ -131,15 +129,96 @@ function backjump.onTick()
     backjump.overrideJump()
 end
 
-print("✅ HOLOXZTER Backjump Loaded!")
+print("✅ ZAKA Backjump Loaded!")
 
 -- ============================================
--- REGISTER BOTH
+-- SPEED HACK
+-- ============================================
+local speedhack = {
+    enabled = true,
+    speedMultiplier = 1.8,
+}
+
+function speedhack.onTick()
+    if not speedhack.enabled then return end
+    local player = GetLocalPlayer()
+    if player then
+        local currentSpeed = player.walkSpeed
+        local newSpeed = currentSpeed * speedhack.speedMultiplier
+        SetWalkSpeed(newSpeed)
+    end
+end
+
+print("✅ ZAKA Speed Hack Loaded!")
+
+-- ============================================
+-- FAST RELOAD
+-- ============================================
+local fastreload = {
+    enabled = true,
+    reloadTime = 0.01,
+}
+
+function fastreload.onTick()
+    if not fastreload.enabled then return end
+    local weapon = GetCurrentWeapon()
+    if weapon then
+        SetReloadTime(weapon, fastreload.reloadTime)
+    end
+end
+
+print("✅ ZAKA Fast Reload Loaded!")
+
+-- ============================================
+-- FAST FIRING
+-- ============================================
+local fastfiring = {
+    enabled = true,
+    fireRate = 0.001,
+}
+
+function fastfiring.onTick()
+    if not fastfiring.enabled then return end
+    local weapon = GetCurrentWeapon()
+    if weapon then
+        SetFireRate(weapon, fastfiring.fireRate)
+    end
+end
+
+print("✅ ZAKA Fast Firing Loaded!")
+
+-- ============================================
+-- INFINITE AMMO
+-- ============================================
+local infiniteammo = {
+    enabled = true,
+    ammoCount = 9999,
+}
+
+function infiniteammo.onTick()
+    if not infiniteammo.enabled then return end
+    local weapon = GetCurrentWeapon()
+    if weapon then
+        SetAmmo(weapon, infiniteammo.ammoCount)
+    end
+end
+
+print("✅ ZAKA Infinite Ammo Loaded!")
+
+-- ============================================
+-- REGISTER ALL HACKS
 -- ============================================
 RegisterTickFunction(aimlock.onTick)
 RegisterTickFunction(backjump.onTick)
+RegisterTickFunction(speedhack.onTick)
+RegisterTickFunction(fastreload.onTick)
+RegisterTickFunction(fastfiring.onTick)
+RegisterTickFunction(infiniteammo.onTick)
 
-print("✅ HOLOXZTER Full Package Ready!")
+print("========================================")
+print("🔥 ZAKA Full Package Ready!")
+print("✅ Aimlock | Backjump | Speed | Reload | Fire | Ammo")
+print("========================================")
 `;
 
 // ============================================
@@ -174,26 +253,31 @@ module.exports = (req, res) => {
     if (req.url === '/status' || req.query.status === 'true') {
         res.status(200).json({
             status: 'online',
-            server: 'HOLOXZTER Private Server',
-            version: '2.0',
-            copyright: '© HOLOXZTER',
-            links: {
-                youtube: 'https://youtube.com/@holoxzterreal',
-                whatsapp: 'https://whatsapp.com/channel/0029Vb88dhE0QeapekxfUC1N'
-            }
+            server: 'ZAKA Private Server',
+            version: '2.3.1',
+            author: 'Zaka',
+            features: [
+                'Aimlock',
+                'Backjump',
+                'Speed Hack',
+                'Fast Reload',
+                'Fast Firing',
+                'Infinite Ammo'
+            ],
+            copyright: '© ZAKA 2026'
         });
         return;
     }
 
     // ============================================
-    // BROWSEER REQUEST - Show branded page
+    // BROWSER REQUEST - Show branded page
     // ============================================
     if (!isFreeFire) {
         res.status(200).send(`
             <!DOCTYPE html>
             <html>
             <head>
-                <title>HOLOXZTER - Private Server</title>
+                <title>ZAKA - Private Server</title>
                 <style>
                     * { margin: 0; padding: 0; box-sizing: border-box; }
                     body {
@@ -224,28 +308,17 @@ module.exports = (req, res) => {
                         color: #888;
                         margin: 10px 0 30px;
                     }
-                    .links {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 15px;
+                    .features {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 10px;
                         margin: 30px 0;
                     }
-                    .links a {
-                        color: white;
-                        background: rgba(233, 69, 96, 0.2);
-                        padding: 15px;
-                        border-radius: 10px;
-                        text-decoration: none;
-                        border: 1px solid rgba(233, 69, 96, 0.3);
-                        transition: all 0.3s;
-                    }
-                    .links a:hover {
-                        background: rgba(233, 69, 96, 0.4);
-                        transform: scale(1.02);
-                    }
-                    .copyright {
-                        margin-top: 30px;
-                        color: #444;
+                    .feature {
+                        background: rgba(233, 69, 96, 0.1);
+                        padding: 10px;
+                        border-radius: 8px;
+                        border: 1px solid rgba(233, 69, 96, 0.2);
                         font-size: 0.9em;
                     }
                     .badge {
@@ -257,19 +330,31 @@ module.exports = (req, res) => {
                         font-size: 0.8em;
                         margin: 10px 0;
                     }
+                    .copyright {
+                        margin-top: 30px;
+                        color: #444;
+                        font-size: 0.9em;
+                    }
+                    .status {
+                        color: #4ade80;
+                    }
                 </style>
             </head>
             <body>
                 <div class="container">
                     <div class="badge">🔒 PRIVATE SERVER</div>
-                    <h1>🔥 HOLOXZTER</h1>
+                    <h1>🔥 ZAKA</h1>
                     <p class="subtitle">Free Fire MAX - Advanced Config Loader</p>
-                    <p style="color: #666; font-size: 0.9em;">Status: <span style="color: #4ade80;">● Online</span></p>
-                    <div class="links">
-                        <a href="https://youtube.com/@holoxzterreal">▶️ Subscribe on YouTube</a>
-                        <a href="https://whatsapp.com/channel/0029Vb88dhE0QeapekxfUC1N">📱 Join WhatsApp Channel</a>
+                    <p style="color: #666; font-size: 0.9em;">Status: <span class="status">● Online</span></p>
+                    <div class="features">
+                        <div class="feature">🎯 Aimlock</div>
+                        <div class="feature">🦘 Backjump</div>
+                        <div class="feature">💨 Speed Hack</div>
+                        <div class="feature">🔄 Fast Reload</div>
+                        <div class="feature">🔥 Fast Firing</div>
+                        <div class="feature">♾️ Infinite Ammo</div>
                     </div>
-                    <div class="copyright">${req.query.copyright || '© HOLOXZTER 2026'}</div>
+                    <div class="copyright">${req.query.copyright || '© ZAKA 2026'}</div>
                 </div>
             </body>
             </html>
