@@ -6,7 +6,7 @@
 -- WhatsApp: https://whatsapp.com/channel/0029Vb88dhE0QeapekxfUC1N
 -- ============================================
 
-print("🔥 HOLOXZTER Private Server Loaded Successfully!")
+print("🔥 Zaka Private Server Loaded Successfully!")
 print("📺 YouTube: https://youtube.com/@holoxzterreal")
 print("📱 WhatsApp: https://whatsapp.com/channel/0029Vb88dhE0QeapekxfUC1N")
 print("⚡ Waiting for match to start...")
@@ -424,7 +424,7 @@ end
 
 print("")
 print("========================================")
-print("  🔥 HOLOXZTER PRIVATE SERVER 🔥")
+print("  🔥 ZAKA PRIVATE SERVER 🔥")
 print("========================================")
 print("  ✅ Aimlock: " .. (config.aimlock.enabled and "ENABLED" or "DISABLED"))
 print("     - FOV: " .. config.aimlock.fov .. "°")
