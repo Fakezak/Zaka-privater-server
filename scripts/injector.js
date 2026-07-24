@@ -4,7 +4,7 @@
 // =============================================
 
 const SERVER = 'https://zaka-privater-server.vercel.app';
-const SCRIPT_URL = `${SERVER}/scripts/freefire_hack.js`;
+const SCRIPT_URL = `${SERVER}/scripts/injector.js`;
 
 console.log('🔥 FreeFire Injector v2.3.1');
 console.log('========================================');
