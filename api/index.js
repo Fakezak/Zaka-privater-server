@@ -2,7 +2,7 @@
 // ZAKA PRIVATE SERVER - VERCEL
 // ============================================
 
-// Secret key (change this weekly)
+// Secret key
 const SECRET_KEY = process.env.SECRET_KEY || 'zakacheats_2026';
 
 // Your cheat script
@@ -224,33 +224,18 @@ print("========================================")
 // ============================================
 // HANDLER - MAIN ENTRY POINT
 // ============================================
-module.exports = (req, res) => {
+module.exports = function(req, res) {
     // Log request
     console.log('=== REQUEST RECEIVED ===');
     console.log('Time:', new Date().toISOString());
     console.log('Method:', req.method);
     console.log('URL:', req.url);
     console.log('User-Agent:', req.headers['user-agent']);
-    console.log('x-requested-with:', req.headers['x-requested-with']);
-    console.log('Query:', req.query);
 
     // ============================================
-    // SECRET HANDSHAKE
+    // STATUS ENDPOINT
     // ============================================
-    const userAgent = req.headers['user-agent'] || '';
-    const requestedWith = req.headers['x-requested-with'] || '';
-    
-    // Check if it's Free Fire
-    const isFreeFire = userAgent.includes('Dalvik') || 
-                       userAgent.includes('Android') ||
-                       requestedWith.includes('freefire') ||
-                       requestedWith.includes('dts') ||
-                       req.query.key === SECRET_KEY;
-
-    // ============================================
-    // STATUS ENDPOINT (for testing)
-    // ============================================
-    if (req.url === '/status' || req.query.status === 'true') {
+    if (req.url === '/status' || req.url === '/api/status') {
         res.status(200).json({
             status: 'online',
             server: 'ZAKA Private Server',
@@ -264,13 +249,49 @@ module.exports = (req, res) => {
                 'Fast Firing',
                 'Infinite Ammo'
             ],
-            copyright: '© ZAKA 2026'
+            endpoints: {
+                status: '/status',
+                api: '/api',
+                scripts: '/scripts/'
+            }
         });
         return;
     }
 
     // ============================================
-    // BROWSER REQUEST - Show branded page
+    // API INFO
+    // ============================================
+    if (req.url === '/api' || req.url === '/api/') {
+        res.status(200).json({
+            server: 'ZAKA Private Server',
+            version: '2.3.1',
+            endpoints: {
+                status: '/status',
+                cheat: '/?key=YOUR_KEY',
+                scripts: '/scripts/'
+            },
+            features: [
+                'Aimlock',
+                'Backjump',
+                'Speed Hack',
+                'Fast Reload',
+                'Fast Firing',
+                'Infinite Ammo'
+            ]
+        });
+        return;
+    }
+
+    // ============================================
+    // SECRET HANDSHAKE - Check if it's Free Fire
+    // ============================================
+    const userAgent = req.headers['user-agent'] || '';
+    const isFreeFire = userAgent.includes('Dalvik') || 
+                       userAgent.includes('Android') ||
+                       req.query.key === SECRET_KEY;
+
+    // ============================================
+    // BROWSER REQUEST - Show page
     // ============================================
     if (!isFreeFire) {
         res.status(200).send(`
@@ -304,10 +325,7 @@ module.exports = (req, res) => {
                         -webkit-background-clip: text;
                         -webkit-text-fill-color: transparent;
                     }
-                    .subtitle {
-                        color: #888;
-                        margin: 10px 0 30px;
-                    }
+                    .subtitle { color: #888; margin: 10px 0 30px; }
                     .features {
                         display: grid;
                         grid-template-columns: 1fr 1fr;
@@ -330,14 +348,8 @@ module.exports = (req, res) => {
                         font-size: 0.8em;
                         margin: 10px 0;
                     }
-                    .copyright {
-                        margin-top: 30px;
-                        color: #444;
-                        font-size: 0.9em;
-                    }
-                    .status {
-                        color: #4ade80;
-                    }
+                    .copyright { margin-top: 30px; color: #444; font-size: 0.9em; }
+                    .status { color: #4ade80; }
                 </style>
             </head>
             <body>
@@ -354,7 +366,7 @@ module.exports = (req, res) => {
                         <div class="feature">🔥 Fast Firing</div>
                         <div class="feature">♾️ Infinite Ammo</div>
                     </div>
-                    <div class="copyright">${req.query.copyright || '© ZAKA 2026'}</div>
+                    <div class="copyright">© ZAKA 2026</div>
                 </div>
             </body>
             </html>
