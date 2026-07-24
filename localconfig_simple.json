@@ -1,9 +1,9 @@
 {
-    "verAddr": "https://zaka-privater-server.vercel.app/scripts/cheat.js",
-    "luaAddr": "https://zaka-privater-server.vercel.app/scripts/cheat.lua",
-    "configAddr": "https://zaka-privater-server.vercel.app/scripts/config.dat",
-    "injectorAddr": "https://zaka-privater-server.vercel.app/scripts/injector.js",
-    "offsetsAddr": "https://zaka-privater-server.vercel.app/scripts/offsets.dat",
+    "verAddr": "https://zaka-privater-server-mnbq.vercel.app/scripts/cheat.js",
+    "luaAddr": "https://zaka-privater-server-mnbq.vercel.app/scripts/cheat.lua",
+    "configAddr": "https://zaka-privater-server-mnbq.vercel.app/scripts/config.dat",
+    "injectorAddr": "https://zaka-privater-server-mnbq.vercel.app/scripts/injector.js",
+    "offsetsAddr": "https://zaka-privater-server-mnbq.vercel.app/scripts/offsets.dat",
     
     "hacks": {
         "speed": 1.8,
@@ -22,5 +22,6 @@
     
     "anti_ban": true,
     "always_active": true,
-    "auto_inject": true
+    "auto_inject": true,
+    "server": "https://zaka-privater-server-mnbq.vercel.app"
 }
